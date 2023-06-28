@@ -12,6 +12,20 @@
 
     <div id="addPhraseTabContent" class="tabContent">
       <h1 class="tabHeading">Create a Block Phrase</h1>
+      <form id="addPhraseForm">
+        <label for="phrase">Phrase:</label>
+        <input type="text" id="phrase" name="phrase" />
+        <label for="replacement">Replacement:</label>
+        <input type="text" id="replacement" name="replacement" />
+        <option>
+          <select name="type" id="type">
+            <option value="1">Exact Match</option>
+            <option value="2">Contains</option>
+            <option value="3">Regex</option>
+          </select>
+        </option>
+        <input type="submit" value="Submit" />
+      </form>
     </div>
 
     <div id="viewPhraseTabContent" class="tabContent" style="display: none">

@@ -6,6 +6,12 @@
 	"icons": {
 		"64": "icons/icon.png"
 	},
+	"permissions": [
+		"webRequest",
+		"webRequestBlocking",
+		"*://*/*",
+		"storage"
+	  ],
 	"background": {
 		"scripts": [
 			"background_script.js"
@@ -14,7 +20,7 @@
 	"content_scripts": [
 		{
 			"matches": [
-				"*://*.mozilla.org/*"
+				"<all_urls>"
 			],
 			"js": [
 				"content_script.js"

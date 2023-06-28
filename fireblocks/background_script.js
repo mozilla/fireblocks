@@ -1,0 +1,1 @@
+console.log("background_script.js loaded");
