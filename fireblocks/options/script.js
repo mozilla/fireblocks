@@ -1,5 +1,4 @@
-// Get the phrase data from the form, store it, and clear the form
-function storePhraseOnSubmit() {
+function getPhraseObj() {
   let replacement, repeat;
   const target = document.getElementById("block-phrase").value;
   const caseSensitive = document.getElementById("case-sensitive").checked;
@@ -17,7 +16,7 @@ function storePhraseOnSubmit() {
     repeat = document.getElementById("repeat-by").value;
   }
 
-  const phraseObj = {
+  return {
     target: target,
     caseSensitive: caseSensitive,
     replaceWith: replaceWith,
@@ -26,7 +25,11 @@ function storePhraseOnSubmit() {
     replaceOption: replaceOption,
     repeat: repeat,
   };
-
+}
+// Get the phrase data from the form, store it, and clear the form
+function storePhraseOnSubmit() {
+  const phraseObj = getPhraseObj();
+  
   browser.storage.local.get("replacees").then((result) => {
     const replacees = result.replacees || [];
     replacees.push(phraseObj);
@@ -35,7 +38,8 @@ function storePhraseOnSubmit() {
 
     document.getElementById("block-phrase").value = "";
     document.getElementById("replacement-phrase").value = "";
-    document.getElementById("replacement-phrase-container").style.display = "none";
+    document.getElementById("replacement-phrase-container").style.display =
+      "none";
     document.getElementById("case-sensitive").checked = false;
     document.getElementById("smart-casing").checked = false;
     document.getElementById("replace-option").value = "block-phrase-only";
@@ -45,54 +49,55 @@ function storePhraseOnSubmit() {
   });
 }
 
+window.addEventListener("DOMContentLoaded", function () {
+  // Show or hide the tabs
+  document
+    .getElementById("addPhraseTab")
+    .addEventListener("click", function () {
+      document.getElementById("addPhraseTabContent").style.display = "block";
+      document.getElementById("viewPhraseTabContent").style.display = "none";
+    });
+  document
+    .getElementById("viewPhraseTab")
+    .addEventListener("click", function () {
+      document.getElementById("addPhraseTabContent").style.display = "none";
+      showPhraseList();
+      document.getElementById("viewPhraseTabContent").style.display = "block";
+    });
 
-// Show or hide the tabs
-addPhraseTab = document.getElementById("addPhraseTab");
-viewPhraseTab = document.getElementById("viewPhraseTab");
-addPhraseTabContent = document.getElementById("addPhraseTabContent");
-viewPhraseTabContent = document.getElementById("viewPhraseTabContent");
-blockPhraseList = document.getElementById("blockPhraseList");
+  // Show or hide the repeat option
+  document
+    .getElementById("replace-option")
+    .addEventListener("change", function () {
+      if (
+        this.value === "sentence" ||
+        this.value === "paragraph" ||
+        this.value === "page"
+      ) {
+        document.getElementById("repeat-container").style.display = "block";
+      } else {
+        document.getElementById("repeat-container").style.display = "none";
+      }
+    });
 
-document.getElementById("addPhraseTab").addEventListener("click", function () {
-  addPhraseTabContent.style.display = "block";
-  viewPhraseTabContent.style.display = "none";
+  // Show or hide the custom replacement phrase
+  document
+    .getElementById("replace-with")
+    .addEventListener("change", function () {
+      if (this.value === "custom") {
+        document.getElementById("replacement-phrase-container").style.display =
+          "block";
+      } else {
+        document.getElementById("replacement-phrase-container").style.display =
+          "none";
+      }
+    });
+
+  // Store the phrase on submit
+  document
+    .getElementById("addPhraseForm")
+    .addEventListener("submit", function (event) {
+      event.preventDefault();
+      storePhraseOnSubmit();
+    });
 });
-document.getElementById("viewPhraseTab").addEventListener("click", function () {
-  addPhraseTabContent.style.display = "none";
-  showPhraseList();
-  viewPhraseTabContent.style.display = "block";
-});
-
-// Show or hide the repeat option
-document
-  .getElementById("replace-option")
-  .addEventListener("change", function () {
-    if (
-      this.value === "sentence" ||
-      this.value === "paragraph" ||
-      this.value === "page"
-    ) {
-      document.getElementById("repeat-container").style.display = "block";
-    } else {
-      document.getElementById("repeat-container").style.display = "none";
-    }
-  });
-
-// Show or hide the custom replacement phrase
-document.getElementById("replace-with").addEventListener("change", function () {
-  if (this.value === "custom") {
-    document.getElementById("replacement-phrase-container").style.display =
-      "block";
-  } else {
-    document.getElementById("replacement-phrase-container").style.display =
-      "none";
-  }
-});
-
-// Store the phrase on submit
-document
-  .getElementById("addPhraseForm")
-  .addEventListener("submit", function (event) {
-    event.preventDefault();
-    storePhraseOnSubmit();
-  });

@@ -1,0 +1,21 @@
+{
+  "devDependencies": {
+    "@babel/core": "^7.22.5",
+    "@babel/preset-env": "^7.22.5",
+    "@playwright/test": "^1.35.1",
+    "babel-jest": "^29.5.0",
+    "geckodriver": "^4.0.4",
+    "jest": "^29.5.0",
+    "jest-environment-jsdom": "^29.5.0",
+    "jest-webextension-mock": "^3.8.9",
+    "jsdom": "^22.1.0",
+    "nyc": "^15.1.0",
+    "playwright": "^1.35.1",
+    "setimmediate": "^1.0.5",
+    "sinon": "^15.2.0",
+    "webextension-polyfill": "^0.10.0"
+  },
+  "scripts": {
+    "test": "jest"
+  }
+}

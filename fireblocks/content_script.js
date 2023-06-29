@@ -2,11 +2,16 @@
 // the casing and punctuation of the original text is preserved
 function smartCaseReplace(replaceeText, replacerText) {
   const capitalIndices = [];
-  const punctuationLocations = {}
+  const punctuationLocations = {};
+
+  // If it's entirely punctuation, don't bother
+  if (replaceeText.match(/^[.,\/#!$%\^&\*;:{}=\-_`~()]+$/g)) {
+    return replaceeText;
+  }
 
   // Gather the indices of capital letters and punctuation
   for (let i = 0; i < replaceeText.length; i++) {
-    if (replaceeText[i].match(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g)) {
+    if (replaceeText[i].match(/[."',\/#!$%\^&\*;:{}=\-_`~()]/g)) {
       punctuationLocations[i] = replaceeText[i];
     } else if (replaceeText[i].toUpperCase() === replaceeText[i]) {
       capitalIndices.push(i);
@@ -28,17 +33,23 @@ function smartCaseReplace(replaceeText, replacerText) {
     }
   }
 
+
   // Replace punctuation
-  for (let i = 0; i < punctuationLocations.length; i++) {
-    const index = i;
+  for (key in punctuationLocations) {
+    const index = key;
     if (index < replacement.length) {
       replacement =
         replacement.slice(0, index) +
         punctuationLocations[index] +
-        replacement.slice(index + 1);
+        replacement.slice(index);
     } else {
-      break;
+      replacement = replacement + punctuationLocations[index];
     }
+  }
+
+  if (punctuationLocations){
+    console.log(punctuationLocations)
+    console.log(replacement)
   }
   return replacement;
 }
@@ -94,7 +105,8 @@ function replaceByWord(text, replacement, smartCase) {
     for (let i = 0; i < numTextWords; i++) {
       const textWord = textWords[i];
       const replacementWord = replacementWords[i % numReplacementWords];
-      newSentence += smartCaseReplace(textWord, replacementWord.toLowerCase()) + " ";
+      newSentence +=
+        smartCaseReplace(textWord, replacementWord.toLowerCase()) + " ";
     }
   } else {
     for (let i = 0; i < numTextWords; i++) {
@@ -123,11 +135,11 @@ function findSentenceStartAndEnd(text, match) {
   return [startIndex, endIndex];
 }
 
-// Replaces the sentence that contains the block phrase with a replacement
-// where the replacement repeats to match the number of words or characters
-function replaceSentence(node, replacee) {
-  let text = node.textContent;
-
+// Recursively replace the sentence that contains the block phrase with a replacement
+function replaceSentence(text, replacee) {
+  let endIndex;
+  let startIndex;
+  let sentence;
   let regexFlags = "gu";
   if (!replacee.caseSensitive) {
     regexFlags += "i";
@@ -135,33 +147,27 @@ function replaceSentence(node, replacee) {
   const regex = new RegExp(replacee.target, regexFlags);
 
   if (replacee.replaceWith === "redact") {
-    let startIndex;
-    let endIndex;
-    const newSentence = text.replaceAll(regex, function (match) {
-      const [startIndex, endIndex] = findSentenceStartAndEnd(text, match);
-      return redactReplace(text.slice(startIndex, endIndex));
+    text.replace(regex, function (match) {
+      [startIndex, endIndex] = findSentenceStartAndEnd(text, match);
+      const redactedSentence = redactReplace(text.slice(startIndex, endIndex));
+      sentence =
+        redactedSentence + replaceSentence(text.slice(endIndex), replacee);
     });
-    node.textContent = node.textContent.replace(
-      text.slice(startIndex, endIndex),
-      newSentence
-    );
+    return sentence ? sentence : text;
   } else if (replacee.replaceWith === "blur") {
-    return;
+    return text;
   } else if (replacee.replaceWith === "custom") {
-    let startIndex;
-    let endIndex;
-    const newSentence = text.replaceAll(regex, function (match) {
-      const [startIndex, endIndex] = findSentenceStartAndEnd(text, match);
-      return replaceByWord(
-        text.slice(startIndex, endIndex),
+    text.replace(regex, function (match) {
+      [startIndex, endIndex] = findSentenceStartAndEnd(text, match);
+      const sentenceFound = text.slice(startIndex, endIndex);
+      const replacement = replaceByWord(
+        sentenceFound,
         replacee.replacement,
         replacee.smartCase
       );
+      sentence = replacement + replaceSentence(text.slice(endIndex), replacee);
     });
-    node.textContent = node.textContent.replace(
-      text.slice(startIndex, endIndex),
-      newSentence
-    );
+    return sentence ? sentence : text;
   }
 }
 
@@ -207,7 +213,7 @@ function replaceText(rootNode, replacee) {
     if (replacee.replaceOption === "block-phrase-only") {
       replaceBlockPhraseOnly(node, replacee);
     } else if (replacee.replaceOption === "sentence") {
-      replaceSentence(node, replacee);
+      node.textContent = replaceSentence(node.textContent, replacee);
     } else if (replacee.replaceOption === "paragraph") {
       replaceParagraph(node, replacee);
     } else if (replacee.replaceOption === "page") {
