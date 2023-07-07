@@ -84,16 +84,12 @@ function handleModifyPhrase(phraseObj, replacees, parentElement) {
   const replaceWithDropdown = document.createElement("select");
   replaceWithDropdown.id = "replace-with";
   replaceWithDropdown.name = "replace-with";
-  const replaceWithBlurOption = document.createElement("option");
-  replaceWithBlurOption.value = "blur";
-  replaceWithBlurOption.textContent = "Blur";
   const replaceWithRedactOption = document.createElement("option");
   replaceWithRedactOption.value = "redact";
   replaceWithRedactOption.textContent = "Redact";
   const replaceWithCustomOption = document.createElement("option");
   replaceWithCustomOption.value = "custom";
   replaceWithCustomOption.textContent = "Custom";
-  replaceWithDropdown.appendChild(replaceWithBlurOption);
   replaceWithDropdown.appendChild(replaceWithRedactOption);
   replaceWithDropdown.appendChild(replaceWithCustomOption);
   replaceWithDropdown.value = phraseObj.replaceWith;

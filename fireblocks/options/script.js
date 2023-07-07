@@ -36,7 +36,7 @@ function storePhraseOnSubmit() {
     document.getElementById("case-sensitive").checked = false;
     document.getElementById("smart-casing").checked = false;
     document.getElementById("replace-option").value = "block-phrase-only";
-    document.getElementById("replace-with").value = "blur";
+    document.getElementById("replace-with").value = "redact";
   });
 }
 
