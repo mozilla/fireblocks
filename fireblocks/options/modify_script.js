@@ -101,11 +101,9 @@ function handleModifyPhrase(phraseObj, replacees, parentElement) {
     if (replaceWithDropdown.value === "custom") {
       replacementPhraseLabel.style.display = "block";
       smartCasingLabel.style.display = "block";
-      repeatByLabel.style.display = "block";
     } else {
       replacementPhraseLabel.style.display = "none";
       smartCasingLabel.style.display = "none";
-      repeatByLabel.style.display = "none";
     }
   });
   replaceWithLabel.appendChild(replaceWithDropdown);
@@ -147,59 +145,20 @@ function handleModifyPhrase(phraseObj, replacees, parentElement) {
   replaceOptionDropdown.name = "replace-option";
   const replaceBlockPhraseOnlyOption = document.createElement("option");
   replaceBlockPhraseOnlyOption.value = "block-phrase-only";
-  replaceBlockPhraseOnlyOption.textContent = "Replace Block Phrase Only";
+  replaceBlockPhraseOnlyOption.textContent = "Eliminate Block Phrase";
   const replaceEntireSentenceOption = document.createElement("option");
-  replaceEntireSentenceOption.value = "sentence";
-  replaceEntireSentenceOption.textContent = "Replace Entire Sentence";
-  const replaceEntireParagraphOption = document.createElement("option");
-  replaceEntireParagraphOption.value = "paragraph";
-  replaceEntireParagraphOption.textContent = "Replace Entire Paragraph";
+  replaceEntireSentenceOption.value = "context";
+  replaceEntireSentenceOption.textContent = "Destroy Context";
   const replaceEntirePageOption = document.createElement("option");
   replaceEntirePageOption.value = "page";
-  replaceEntirePageOption.textContent = "Replace Entire Page";
-  replaceOptionDropdown.addEventListener("change", function () {
-    if (
-      replaceOptionDropdown.value === "block-phrase-only" ||
-      replaceWithLabel.value !== "custom"
-    ) {
-      repeatByLabel.style.display = "none";
-    } else {
-      repeatByLabel.style.display = "block";
-    }
-  });
+  replaceEntirePageOption.textContent = "Obliterate Entire Page";
   replaceOptionDropdown.appendChild(replaceBlockPhraseOnlyOption);
   replaceOptionDropdown.appendChild(replaceEntireSentenceOption);
-  replaceOptionDropdown.appendChild(replaceEntireParagraphOption);
   replaceOptionDropdown.appendChild(replaceEntirePageOption);
   replaceOptionDropdown.value = phraseObj.replaceOption;
   replaceOptionLabel.appendChild(replaceOptionDropdown);
   replaceOptionLabel.appendChild(document.createElement("br"));
 
-  // Repeat By
-  const repeatByLabel = document.createElement("label");
-  repeatByLabel.textContent = "Repeat By:";
-  const repeatByDropdown = document.createElement("select");
-  repeatByDropdown.id = "repeat-by";
-  repeatByDropdown.name = "repeat-by";
-  const repeatByNumWordsOption = document.createElement("option");
-  repeatByNumWordsOption.value = "word";
-  repeatByNumWordsOption.textContent = "Number of Words";
-  const repeatByNumCharsOption = document.createElement("option");
-  repeatByNumCharsOption.value = "character";
-  repeatByNumCharsOption.textContent = "Number of Characters";
-  if (
-    phraseObj.replaceOption === "block-phrase-only" ||
-    phraseObj.replaceWith !== "custom"
-  ) {
-    repeatByLabel.style.display = "none";
-  } else {
-    repeatByLabel.style.display = "block";
-  }
-  repeatByDropdown.appendChild(repeatByNumWordsOption);
-  repeatByDropdown.appendChild(repeatByNumCharsOption);
-  repeatByDropdown.value = phraseObj.repeat ? phraseObj.repeat : "word";
-  repeatByLabel.appendChild(repeatByDropdown);
-  repeatByLabel.appendChild(document.createElement("br"));
 
   // Confirm
   const confirmButton = document.createElement("button");
@@ -223,7 +182,6 @@ function handleModifyPhrase(phraseObj, replacees, parentElement) {
   modifyForm.appendChild(replacementPhraseLabel);
   modifyForm.appendChild(smartCasingLabel);
   modifyForm.appendChild(replaceOptionLabel);
-  modifyForm.appendChild(repeatByLabel);
   modifyForm.appendChild(confirmButton);
   modifyForm.appendChild(cancelButton);
 
@@ -255,17 +213,13 @@ function saveModifiedPhrase(phraseObj, replacees) {
   const modifiedReplaceOptionDropdown = document.querySelector(
     "#modify-dropdown select[id='replace-option']"
   );
-  const modifiedRepeatByDropdown = document.querySelector(
-    "#modify-dropdown select[id='repeat-by']"
-  );
 
   phraseObj.target = modifiedBlockPhraseInput.value;
   phraseObj.caseSensitive = modifiedCaseSensitiveInput.checked;
   phraseObj.replaceWith = modifiedReplaceWithDropdown.value;
-  phraseObj.replacement = modifiedReplacementPhraseInput.value;
+  phraseObj.replacement = modifiedReplacementPhraseInput.value || undefined;
   phraseObj.smartCase = modifiedSmartCasingInput.checked;
   phraseObj.replaceOption = modifiedReplaceOptionDropdown.value;
-  phraseObj.repeat = modifiedRepeatByDropdown.value;
 
   console.log("newPhraseObj:", phraseObj);
 

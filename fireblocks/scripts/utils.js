@@ -1,0 +1,120 @@
+function observeChanges(rootNode, replacee, replaceProtocol) {
+  const observer = new MutationObserver(function (mutations) {
+    mutations.forEach(function (mutation) {
+      if (mutation.addedNodes.length) {
+        mutation.addedNodes.forEach((node) => {
+          replaceProtocol(node, replacee);
+        });
+      }
+    });
+  });
+
+  observer.observe(rootNode, {
+    childList: true,
+    subtree: true,
+  });
+}
+
+function smartCaseReplace(replaceeText, replacerText) {
+  const capitalIndices = [];
+  const punctuationLocations = {};
+
+  if (replaceeText.match(/^[.,\/#!$%\^&\*;:{}=\-_`~()]+$/g)) {
+    return replaceeText;
+  }
+
+  for (let i = 0; i < replaceeText.length; i++) {
+    if (replaceeText[i].match(/[."',\/#!$%\^&\*;:{}=\-_`~()]/g)) {
+      punctuationLocations[i] = replaceeText[i];
+    } else if (replaceeText[i].toUpperCase() === replaceeText[i]) {
+      capitalIndices.push(i);
+    }
+  }
+
+  let replacement = replacerText;
+  let replacementArr = replacement.split("");
+
+  capitalIndices.forEach((index) => {
+    if (index < replacementArr.length) {
+      replacementArr[index] = replacementArr[index].toUpperCase();
+    }
+  });
+
+  for (const key in punctuationLocations) {
+    const index = Number(key);
+    if (index < replacementArr.length) {
+      replacementArr.splice(index, 0, punctuationLocations[key]);
+    } else {
+      replacementArr.push(punctuationLocations[key]);
+    }
+  }
+
+  replacement = replacementArr.join("");
+  return replacement;
+}
+
+
+// Replaces the text given (i.e. an entire sentence or paragraph that contians
+// the block phrase) with the replacement where the replacement repeats
+// to match the number of words in the text
+function replaceByWord(text, replacement, smartCase) {
+  const textWords = text.split(" ");
+  const replacementWords = replacement.split(" ");
+  const numTextWords = textWords.length;
+  const numReplacementWords = replacementWords.length;
+  let newSentence = "";
+
+  for (let i = 0; i < numTextWords; i++) {
+    const textWord = textWords[i];
+    const replacementWord = replacementWords[i % numReplacementWords];
+
+    if (smartCase) {
+      newSentence +=
+        smartCaseReplace(textWord, replacementWord.toLowerCase()) + " ";
+    } else {
+      newSentence += replacementWord + " ";
+    }
+  }
+
+  if (newSentence.length < replacement.length) {
+    newSentence = replacement;
+  }
+
+  return newSentence;
+}
+
+// Replaces all alphanumeric characters with a black square
+function redactReplace(replaceeText) {
+  return replaceeText.replace(/[a-z0-9]/gi, "█");
+}
+
+function findSentenceStartAndEnd(text, match) {
+  const matchIndex = text.indexOf(match);
+  let startIndex = matchIndex;
+  let endIndex = matchIndex + match.length;
+  while (startIndex > 0 && text[startIndex] !== ".") {
+    startIndex--;
+  }
+  while (endIndex < text.length && text[endIndex] !== ".") {
+    endIndex++;
+  }
+  return [startIndex, endIndex];
+}
+
+function replaceStragglers(stragglerArray, replacee) {
+  const regexFlags = replacee.caseSensitive ? "g" : "gi";
+  const regex = new RegExp(replacee.target, regexFlags);
+  stragglerArray.forEach((node) => {
+    if (!node.textContent.match(regex)) {
+      return;
+    }
+    console.log("straggler node", node);
+    node.textContent = node.textContent.replace(regex, (match) => {
+      if (replacee.replaceOption === "context") {
+        return contextReplaceWith(node.textContent, replacee);
+      } else if (replacee.replaceOption === "block-phrase-only") {
+        return blockReplaceWith(match, replacee, node);
+      }
+    });
+  });
+}

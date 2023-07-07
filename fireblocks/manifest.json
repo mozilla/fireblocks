@@ -23,7 +23,11 @@
 				"<all_urls>"
 			],
 			"js": [
-				"content_script.js"
+				"scripts/main.js",
+				"scripts/block_phrase_script.js",
+				"scripts/context_replace_script.js",
+				"scripts/page_replace_script.js",
+				"scripts/utils.js"
 			]
 		}
 	],
@@ -31,7 +35,7 @@
 		"default_icon": {
 			"64": "icons/icon.png"
 		},
-		"default_popup": "browserAction/index.html",
+		"default_popup": "options/index.html",
 		"default_title": "Fireblocks"
 	},
 	"page_action": {
