@@ -1,3 +1,4 @@
+// Route the replacee to the appropriate replacement function
 function doReplacement(node, replacee) {
   switch (replacee.replaceOption) {
     case "page":
@@ -12,6 +13,8 @@ function doReplacement(node, replacee) {
   }
 }
 
+// Retrieve all replacees from storage and replace the body
+// and head of the page for each
 function startReplacement() {
   browser.storage.local.get("replacees").then((result) => {
     const replacees = result.replacees || [];
@@ -23,4 +26,5 @@ function startReplacement() {
   });
 }
 
+// runs on page load
 startReplacement();

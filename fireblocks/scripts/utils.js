@@ -1,3 +1,5 @@
+// Observe changes on the nodes for a specific replacee, then
+// call the proper function when there are changes to the DOM.
 function observeChanges(rootNode, replacee, replaceProtocol) {
   const observer = new MutationObserver(function (mutations) {
     mutations.forEach(function (mutation) {
@@ -15,14 +17,20 @@ function observeChanges(rootNode, replacee, replaceProtocol) {
   });
 }
 
+// Replace the text by maintaining the original casing and
+// punctuation. So "We'll be FINE" being replace by "banana"
+// will result in "Ba'nana banana BANAna" in the case of
+// contextReplace
 function smartCaseReplace(replaceeText, replacerText) {
   const capitalIndices = [];
   const punctuationLocations = {};
 
+  // Skip if the replacee is only punctuation
   if (replaceeText.match(/^[.,\/#!$%\^&\*;:{}=\-_`~()]+$/g)) {
     return replaceeText;
   }
 
+  // Find the indices of capital letters and punctuation
   for (let i = 0; i < replaceeText.length; i++) {
     if (replaceeText[i].match(/[."',\/#!$%\^&\*;:{}=\-_`~()]/g)) {
       punctuationLocations[i] = replaceeText[i];
@@ -34,12 +42,14 @@ function smartCaseReplace(replaceeText, replacerText) {
   let replacement = replacerText;
   let replacementArr = replacement.split("");
 
+  // Capitalize the replacement letters that were capitalized in the replacee
   capitalIndices.forEach((index) => {
     if (index < replacementArr.length) {
       replacementArr[index] = replacementArr[index].toUpperCase();
     }
   });
 
+  // Add punctuation back in
   for (const key in punctuationLocations) {
     const index = Number(key);
     if (index < replacementArr.length) {
@@ -52,7 +62,6 @@ function smartCaseReplace(replaceeText, replacerText) {
   replacement = replacementArr.join("");
   return replacement;
 }
-
 
 // Replaces the text given (i.e. an entire sentence or paragraph that contians
 // the block phrase) with the replacement where the replacement repeats
@@ -88,6 +97,7 @@ function redactReplace(replaceeText) {
   return replaceeText.replace(/[a-z0-9]/gi, "█");
 }
 
+// Finds the index of the first and last character of the sentence
 function findSentenceStartAndEnd(text, match) {
   const matchIndex = text.indexOf(match);
   let startIndex = matchIndex;
@@ -101,6 +111,8 @@ function findSentenceStartAndEnd(text, match) {
   return [startIndex, endIndex];
 }
 
+// Replace nodes that did not register as replaced due to 
+// race conditions. 
 function replaceStragglers(stragglerArray, replacee) {
   const regexFlags = replacee.caseSensitive ? "g" : "gi";
   const regex = new RegExp(replacee.target, regexFlags);

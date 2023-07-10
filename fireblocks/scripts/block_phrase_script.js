@@ -1,3 +1,4 @@
+// Works as a redirector for the type of replacement
 function blockReplaceWith(match, replacee) {
   if (replacee.replaceWith === "redact") {
     return redactReplace(match);

@@ -1,37 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="UTF-8" />
-    <link href="style.css" rel="stylesheet" />
+    <title>Fireblocks</title>
+    <link href="../deps/tabulator/css/tabulator.min.css" rel="stylesheet" />
+    <script type="text/javascript" src="../deps/tabulator/js/tabulator.min.js"></script>
   </head>
   <body>
-    <div class="tabBar">
-      <button class="tab" id="addPhraseTab">Create a Block Phrase</button>
-      <button class="tab" id="viewPhraseTab">Modify Block Phrases</button>
-    </div>
-
-    <div id="addPhraseTabContent" class="tabContent">
-      <h1 class="tabHeading">Create a Block Phrase</h1>
-      <form id="addPhraseForm">
-        <label for="phrase">Phrase:</label>
-        <input type="text" id="phrase" name="phrase" />
-        <label for="replacement">Replacement:</label>
-        <input type="text" id="replacement" name="replacement" />
-        <option>
-          <select name="type" id="type">
-            <option value="1">Exact Match</option>
-            <option value="2">Contains</option>
-            <option value="3">Regex</option>
-          </select>
-        </option>
-        <input type="submit" value="Submit" />
-      </form>
-    </div>
-
-    <div id="viewPhraseTabContent" class="tabContent" style="display: none">
-      <h1 class="tabHeading">Modify Block Phrases</h1>
-    </div>
-
-    <script src="script.js"></script>
+    <h1>Fireblocks</h1>
+    <div id="phrase-table"></div>
   </body>
+  <script type="text/javascript" src="script.js"></script>
 </html>
