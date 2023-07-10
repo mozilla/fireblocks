@@ -1,8 +1,6 @@
 browser.storage.local.get("replacees").then((result) => {
     const replacees = result.replacees || [];
   
-    console.log(replacees);
-  
     var table = new Tabulator("#phrase-table", {
       columns: [
         { title: "Target", field: "target", editor: "input", width: 100 },

@@ -30,7 +30,6 @@ function replacePage(rootNode, replacee) {
       if (!textNode.textContent.match(/[a-zA-Z0-9\-]/)) {
         continue;
       }
-      console.log("node", textNode);
       textNode.textContent = replaceByWord(
         textNode.textContent.trim(),
         replacee.replacement,

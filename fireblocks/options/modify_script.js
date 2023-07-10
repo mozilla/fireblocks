@@ -217,7 +217,7 @@ function saveModifiedPhrase(phraseObj, replacees) {
   phraseObj.smartCase = modifiedSmartCasingInput.checked;
   phraseObj.replaceOption = modifiedReplaceOptionDropdown.value;
 
-  console.log("newPhraseObj:", phraseObj);
+  console.log("stored", phraseObj);
 
   browser.storage.local
     .set({ replacees })

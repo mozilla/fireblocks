@@ -120,7 +120,7 @@ function replaceStragglers(stragglerArray, replacee) {
     if (!node.textContent.match(regex)) {
       return;
     }
-    console.log("straggler node", node);
+
     node.textContent = node.textContent.replace(regex, (match) => {
       if (replacee.replaceOption === "context") {
         return contextReplaceWith(node.textContent, replacee);
