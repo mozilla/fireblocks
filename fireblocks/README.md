@@ -6,9 +6,17 @@ Does this ever happen to you?
 If so, you might be interested in Fireblocks! Fireblocks is a Firefox extension that allows you to block words and phrases from your view on the world wide web. It also allows you to customize the logic in which a word or phrase gets replaced, and even has special replacement phrases built in! And it's made by a non-profit organization that will never sell your data to advertisers or other nefarious entities!
 
 ## Setup
+
+### Installation
+
+Install Node. In `root/fireblocks`, run `npm install`.
+
+### Running
+
 To run this extension, you can either:
-1. In Firefox, navigate to `about:debugging` and click "Load Temporary Add-on...". Then, select the `manifest.json` file in the `root/fireblocks` directory of this repository.
-2. Download the web-ext tool from Mozilla (`npm install --global web-ext`) and run `web-ext run` in the `root/fireblocks` directory of this repository. This allows for hot reloading of the extension.
+1. Run `npm run run` in the `root/fireblocks` directory of this repository. This will run the extension in a new Firefox window. This allows for hot reloading of the extension when you make changes to the code.
+2. In Firefox, navigate to `about:debugging` and click "Load Temporary Add-on...". Then, select the `manifest.json` file in the `root/fireblocks` directory of this repository.
+
 
 ## Debugging
 There are two aspects to debug.

@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "Fireblocks",
-	"description": "Block and modify, words and phrases won't ever meet your eye",
+	"description": "Time for a change.",
 	"version": "0.0.1",
 	"icons": {
 		"64": "icons/icon.png"
@@ -46,6 +46,6 @@
 		"default_title": "Fireblocks"
 	},
 	"options_ui": {
-		"page": "browserAction/index.html"
+		"page": "options/index.html"
 	}
 }
