@@ -46,6 +46,6 @@
 		"default_title": "Fireblocks"
 	},
 	"options_ui": {
-		"page": "options/index.html"
+		"page": "browserAction/index.html"
 	}
 }

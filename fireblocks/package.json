@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "tabulator": "^0.2.40"
+  },
+  "dependencies": {
+    "tabulator-tables": "^5.5.0"
+  }
+}
