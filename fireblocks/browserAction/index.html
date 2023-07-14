@@ -2,12 +2,41 @@
 <html>
   <head>
     <title>Fireblocks</title>
-    <link rel="stylesheet" href="../node_modules/tabulator-tables/dist/css/tabulator.min.css">
-    <script type="text/javascript" src="../node_modules/tabulator-tables/dist/js/tabulator.min.js"></script>
+
+    <link
+      rel="stylesheet"
+      href="../dist/tabulator-tables/css/tabulator_semanticui.min.css"
+    />
+    <link rel="stylesheet" href="../dist/bootstrap/css/bootstrap.min.css" />
+    <link
+      rel="stylesheet"
+      href="../dist/bootstrap-icons/font/bootstrap-icons.css"
+    />
+    <script
+      type="text/javascript"
+      src="../dist/tabulator-tables/js/tabulator.min.js"
+    ></script>
+
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <h1>Fireblocks</h1>
+    <div class="header-container">
+      <h1 class="table-title">f:reb/ocks</h1>
+      <div class="clipboard-container"></div>
+    </div>
+    <div class="button-container">
+      <button class="btn btn-outline-primary add-row-button">add phrase</button>
+      <button class="btn btn-outline-secondary enable-all-button">
+        enable a//
+      </button>
+      <button class="btn btn-outline-secondary disable-all-button">
+        disable a//
+      </button>
+    </div>
+
     <div id="phrase-table"></div>
   </body>
+  <script type="text/javascript" src="table.js"></script>
+  <script type="text/javascript" src="utils.js"></script>
   <script type="text/javascript" src="script.js"></script>
 </html>

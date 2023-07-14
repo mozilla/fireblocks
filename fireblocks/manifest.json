@@ -35,17 +35,10 @@
 		"default_icon": {
 			"64": "icons/icon.png"
 		},
-		"default_popup": "options/index.html",
-		"default_title": "Fireblocks"
-	},
-	"page_action": {
-		"default_icon": {
-			"64": "icons/icon.png"
-		},
-		"default_popup": "pageAction/index.html",
+		"default_popup": "browserAction/index.html",
 		"default_title": "Fireblocks"
 	},
 	"options_ui": {
-		"page": "options/index.html"
+		"page": "browserAction/index.html"
 	}
 }

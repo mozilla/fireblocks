@@ -111,8 +111,8 @@ function findSentenceStartAndEnd(text, match) {
   return [startIndex, endIndex];
 }
 
-// Replace nodes that did not register as replaced due to 
-// race conditions. 
+// Replace nodes that did not register as replaced due to
+// race conditions.
 function replaceStragglers(stragglerArray, replacee) {
   const regexFlags = replacee.caseSensitive ? "g" : "gi";
   const regex = new RegExp(replacee.target, regexFlags);
@@ -121,10 +121,20 @@ function replaceStragglers(stragglerArray, replacee) {
       return;
     }
 
+    // try to avoid replacing things that look like code
+    if (
+      node.textContent.match(/\{.*\}.*:.*;.*./) &&
+      node.textContent.match(/-/)
+    ) {
+      return;
+    }
+    console.log("nodename", node.nodeName);
+    console.log("node", node.textContent);
+
     node.textContent = node.textContent.replace(regex, (match) => {
-      if (replacee.replaceOption === "context") {
+      if (replacee.replaceOption === "Destroy Context") {
         return contextReplaceWith(node.textContent, replacee);
-      } else if (replacee.replaceOption === "block-phrase-only") {
+      } else if (replacee.replaceOption === "Eliminate Block Phrase") {
         return blockReplaceWith(match, replacee, node);
       }
     });

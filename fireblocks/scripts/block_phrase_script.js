@@ -1,8 +1,8 @@
 // Works as a redirector for the type of replacement
 function blockReplaceWith(match, replacee) {
-  if (replacee.replaceWith === "redact") {
+  if (replacee.replaceWith === "Redact") {
     return redactReplace(match);
-  } else if (replacee.replaceWith === "custom") {
+  } else if (replacee.replaceWith === "Custom") {
     if (replacee.smartCase) {
       return smartCaseReplace(match, replacee.replacement);
     } else {
@@ -38,7 +38,7 @@ function replaceBlockPhraseOnly(rootNode, replacee) {
         node.style.filter = "brightness(0%) contrast(0%)";
       }
     } else if (
-      ["SCRIPT", "STYLE", "MAIN"].includes(node.nodeName) ||
+      ["SCRIPT", "STYLE", "MAIN", "NOSCRIPT"].includes(node.nodeName) ||
       !node.textContent
     ) {
       continue;
