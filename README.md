@@ -13,7 +13,11 @@ Install Node. In the root directory, run `npm install`.
 
 ### Running
 
-Run `npm run start` in the root directory of this repository. This will run the extension in a new Firefox window. This allows for hot reloading of the extension when you make changes to the code.
+Run `npm start` in the root directory of this repository. This will run the extension in a new Firefox window. This allows for hot reloading of the extension when you make changes to the code.
+
+### Building
+
+Run `npm run build` in the root directory of this repository. This will create a zip file in the `web-ext-artifacts/` directory.
 
 ## Debugging
 There are two aspects to debug.
