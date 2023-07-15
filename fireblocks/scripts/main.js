@@ -19,7 +19,7 @@ function startReplacement() {
   browser.storage.local.get("replacees").then((result) => {
     const replacees = result.replacees || [];
     replacees.forEach((replacee) => {
-      if (replacee.enable) {
+      if (replacee.enable && replacee.target) {
       doReplacement(document.body, replacee);
       doReplacement(document.head, replacee);
       }

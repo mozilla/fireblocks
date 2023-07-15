@@ -13,10 +13,7 @@ Install Node. In `root/fireblocks`, run `npm install`.
 
 ### Running
 
-To run this extension, you can either:
-1. Run `npm run run` in the `root/fireblocks` directory of this repository. This will run the extension in a new Firefox window. This allows for hot reloading of the extension when you make changes to the code.
-2. In Firefox, navigate to `about:debugging` and click "Load Temporary Add-on...". Then, select the `manifest.json` file in the `root/fireblocks` directory of this repository.
-
+Run `npm run start` in the `root/fireblocks` directory of this repository. This will run the extension in a new Firefox window. This allows for hot reloading of the extension when you make changes to the code.
 
 ## Debugging
 There are two aspects to debug.

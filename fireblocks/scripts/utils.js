@@ -128,8 +128,6 @@ function replaceStragglers(stragglerArray, replacee) {
     ) {
       return;
     }
-    console.log("nodename", node.nodeName);
-    console.log("node", node.textContent);
 
     node.textContent = node.textContent.replace(regex, (match) => {
       if (replacee.replaceOption === "Destroy Context") {

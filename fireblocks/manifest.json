@@ -7,16 +7,9 @@
 		"64": "icons/icon.png"
 	},
 	"permissions": [
-		"webRequest",
-		"webRequestBlocking",
 		"*://*/*",
 		"storage"
 	  ],
-	"background": {
-		"scripts": [
-			"background_script.js"
-		]
-	},
 	"content_scripts": [
 		{
 			"matches": [

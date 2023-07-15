@@ -42,9 +42,9 @@ Array.from(copyButtons).forEach((button) => {
     // replace the clipboard icon with a checkmark for a second
     const iTag = button.getElementsByTagName("i")[0];
     iTag.classList.remove("bi-clipboard");
-    iTag.classList.add("bi-check2");
+    iTag.classList.add("bi-clipboard-check-fill");
     setTimeout(function () {
-      iTag.classList.remove("bi-check2");
+      iTag.classList.remove("bi-clipboard-check-fill");
       iTag.classList.add("bi-clipboard");
     }, 1500);
 
