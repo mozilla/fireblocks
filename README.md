@@ -9,11 +9,11 @@ If so, you might be interested in Fireblocks! Fireblocks is a Firefox extension 
 
 ### Installation
 
-Install Node. In `root/fireblocks`, run `npm install`.
+Install Node. In the root directory, run `npm install`.
 
 ### Running
 
-Run `npm run start` in the `root/fireblocks` directory of this repository. This will run the extension in a new Firefox window. This allows for hot reloading of the extension when you make changes to the code.
+Run `npm run start` in the root directory of this repository. This will run the extension in a new Firefox window. This allows for hot reloading of the extension when you make changes to the code.
 
 ## Debugging
 There are two aspects to debug.
@@ -30,4 +30,4 @@ There are no tests as of yet. Content scripts are locked down pretty tight, so i
 1. Currently, the browserAction scripts are in progress with the new UI. Both the browserAction and options page use the options scripts.
 2. pageAction is empty for now. It may be used for an easily accessible whitelist, disabling, or other features.
 3. The content scripts are located in `scripts/` where `main.js` is the entry point.
-4. The "Obliterate Entire Page" option will break a few pages, especially ones with lots of dynamic content, like google. Other search engines work fine, and pages like wikipedia too.
+4. The "Obliterate Entire Page" option will break a few pages, especially ones with lots of dynamic content, like google. I've tried to mitigate this by attempting to match nodes that look like code or styles and ignore them (since they may not explicitly be under those tags). Other search engines work fine, and pages like wikipedia too.
