@@ -1,0 +1,17 @@
+{
+  "devDependencies": {
+    "rimraf": "^5.0.1",
+    "web-ext": "^7.6.2"
+  },
+  "scripts": {
+    "start": "npm run dist && web-ext run",
+    "build": "npm run dist && web-ext build --overwrite-dest --ignore-files \"package-lock.json\"",
+    "dist": "rimraf dist && mkdir dist && cp -r node_modules/tabulator-tables/dist dist/tabulator-tables && cp -r node_modules/bootstrap/dist dist/bootstrap && cp -r node_modules/bootstrap-icons/ dist/bootstrap-icons && node builder_helper.js",  
+    "lint": "web-ext lint"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.0",
+    "bootstrap-icons": "^1.10.5",
+    "tabulator-tables": "^5.5.0"
+  }
+}
