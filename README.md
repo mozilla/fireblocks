@@ -29,9 +29,6 @@ There are two aspects to debug.
 
 There are no tests as of yet. Content scripts are locked down pretty tight, so it's harder than usual to test them functionally. It may be worth looking into having tests as content scripts, activated by a different manifest.json file (so that they are not deployed).
 
-## Pre-Alpha Notes
+## Notes
 
-1. Currently, the browserAction scripts are in progress with the new UI. Both the browserAction and options page use the options scripts.
-2. pageAction is empty for now. It may be used for an easily accessible whitelist, disabling, or other features.
-3. The content scripts are located in `scripts/` where `main.js` is the entry point.
-4. The "Obliterate Entire Page" option will break a few pages, especially ones with lots of dynamic content, like google. I've tried to mitigate this by attempting to match nodes that look like code or styles and ignore them (since they may not explicitly be under those tags). Other search engines work fine, and pages like wikipedia too.
+1. To save space, the necessary files from the npm packages are copied over in the `dist` script. The non-minified versions exist in `node_modules`.
