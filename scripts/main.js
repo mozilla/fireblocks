@@ -3,13 +3,26 @@ function doReplacement(node, replacee) {
   switch (replacee.replaceOption) {
     case "Obliterate Entire Page":
       replacePage(node, replacee);
-      observeChanges(node, replacee, replacePage);
+      if (!isSubsetString(replacee.target, replacee.replacement)) {
+        observeChanges(node, replacee, replacePage);
+      }
+      return;
     case "Eliminate Block Phrase":
-      replaceBlockPhraseOnly(node, replacee);
-      observeChanges(node, replacee, replaceBlockPhraseOnly);
+      if (!isSubsetString(replacee.target, replacee.replacement)) {
+        replaceBlockPhraseOnly(node, replacee);
+        observeChanges(node, replacee, replaceBlockPhraseOnly);
+      } else {
+        replaceBlockPhraseTextOnly(node, replacee);
+      }
+      return;
     case "Destroy Context":
-      replaceContext(node, replacee);
-      observeChanges(node, replacee, replaceContext);
+      if (!isSubsetString(replacee.target, replacee.replacement)) {
+        replaceContext(node, replacee);
+        observeChanges(node, replacee, replaceContext);
+      } else {
+        replaceContextText(node, replacee);
+      }
+      return;
   }
 }
 
@@ -20,8 +33,8 @@ function startReplacement() {
     const replacees = result.replacees || [];
     replacees.forEach((replacee) => {
       if (replacee.enable && replacee.target) {
-      doReplacement(document.body, replacee);
-      doReplacement(document.head, replacee);
+        doReplacement(document.body, replacee);
+        doReplacement(document.head, replacee);
       }
     });
   });
