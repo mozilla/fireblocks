@@ -1,7 +1,7 @@
 // Replaces the page that contains the block phrase with a replacement
 // where the replacement repeats to match the number of words
 function replacePage(rootNode, replacee) {
-  const regexFlags = replacee.caseSensitive ? "gu" : "gui";
+  const regexFlags = "i";
   const regex = new RegExp(replacee.target, regexFlags);
   if (!rootNode.textContent.match(regex)) {
     return;

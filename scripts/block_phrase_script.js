@@ -21,7 +21,7 @@ function replaceBlockPhraseOnly(rootNode, replacee) {
     false
   );
 
-  const regexFlags = replacee.caseSensitive ? "gu" : "gui";
+  const regexFlags = "gi";
   const regex = new RegExp(replacee.target, regexFlags);
   const stragglerArray = [];
 
@@ -45,7 +45,6 @@ function replaceBlockPhraseOnly(rootNode, replacee) {
     }
 
     const textHasPhrase = node.textContent.match(regex);
-
     // If the block phrase exists, replace it bottom up
     if (textHasPhrase) {
       node.childNodes.forEach((child) => {
@@ -73,5 +72,28 @@ function replaceBlockPhraseOnly(rootNode, replacee) {
   }
 
   // Reverse the array so that we replace the deepest nodes first
-  replaceStragglers(stragglerArray.reverse(), replacee);
+    replaceStragglers(stragglerArray.reverse(), replacee);
+}
+
+// Do the same as above but lighten the scope due to
+// the target being a subset of the replacement
+function replaceBlockPhraseTextOnly(rootNode, replacee) {
+  const walker = document.createTreeWalker(
+    rootNode,
+    NodeFilter.SHOW_TEXT,
+    null,
+    false
+  );
+
+  const regexFlags = "gi";
+  const regex = new RegExp(replacee.target, regexFlags);
+
+  let textNode;
+  while ((textNode = walker.nextNode())) {
+    if (textNode.textContent.match(regex)) {
+      textNode.textContent = textNode.textContent.replace(regex, (match) => {
+        return blockReplaceWith(match, replacee);
+      });
+    }
+  }
 }

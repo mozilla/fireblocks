@@ -4,10 +4,10 @@ function doReplacement(node, replacee) {
     case "Block entire page":
       replacePage(node, replacee);
       observeChanges(node, replacee, replacePage);
-    case "Block just phrase":
+    case "Eliminate Block Phrase":
       replaceBlockPhraseOnly(node, replacee);
       observeChanges(node, replacee, replaceBlockPhraseOnly);
-    case "Block entire section":
+    case "Destroy Context":
       replaceContext(node, replacee);
       observeChanges(node, replacee, replaceContext);
   }
@@ -20,8 +20,8 @@ function startReplacement() {
     const replacees = result.replacees || [];
     replacees.forEach((replacee) => {
       if (replacee.enable && replacee.target) {
-      doReplacement(document.body, replacee);
-      doReplacement(document.head, replacee);
+        doReplacement(document.body, replacee);
+        doReplacement(document.head, replacee);
       }
     });
   });
