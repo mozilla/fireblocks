@@ -130,9 +130,9 @@ function replaceStragglers(stragglerArray, replacee) {
     }
 
     node.textContent = node.textContent.replace(regex, (match) => {
-      if (replacee.replaceOption === "Destroy Context") {
+      if (replacee.replaceOption === "Block entire section") {
         return contextReplaceWith(node.textContent, replacee);
-      } else if (replacee.replaceOption === "Eliminate Block Phrase") {
+      } else if (replacee.replaceOption === "Block just phrase") {
         return blockReplaceWith(match, replacee, node);
       }
     });

@@ -1,13 +1,13 @@
 // Route the replacee to the appropriate replacement function
 function doReplacement(node, replacee) {
   switch (replacee.replaceOption) {
-    case "Obliterate Entire Page":
+    case "Block entire page":
       replacePage(node, replacee);
       observeChanges(node, replacee, replacePage);
-    case "Eliminate Block Phrase":
+    case "Block just phrase":
       replaceBlockPhraseOnly(node, replacee);
       observeChanges(node, replacee, replaceBlockPhraseOnly);
-    case "Destroy Context":
+    case "Block entire section":
       replaceContext(node, replacee);
       observeChanges(node, replacee, replaceContext);
   }

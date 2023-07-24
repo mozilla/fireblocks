@@ -9,13 +9,9 @@ const clipboardButtons = [
   "\uD83D\uDCA9", // poop
   "!!! SPOILER ALERT !!!",
   "\uD83E\uDD21", // clown
-  "!!! WARNING !!!",
   "\uD83D\uDC80", // skull
-  "!!! CENSORED !!!",
-  "\uD83D\uDC4E", // thumbs down
   "NOPE, NOT TODAY",
-  "\u2605\u2605\u2605\u2605\u2605", // 5 stars
-  "\u2605\u2606\u2606\u2606\u2606", // 1 star out of 5
+  "\uD83D\uDC4E", // thumbs down
   "%$#@!",
   "\uD83C\uDF46", // eggplant
 ];
@@ -63,6 +59,11 @@ Array.from(copyButtons).forEach((button) => {
 browser.storage.local.get("replacees").then((result) => {
   const replacees = result.replacees || [];
   const table = makeTable(replacees);
+  // if table is empty, do not show the table
+  if (replacees.length === 0) {
+    document.getElementById("phrase-table").style.maxHeight = "0px";
+    document.getElementsByClassName("clipboard-container")[0].style.display = "none";
+  }
 
   // Save on edit, disallow cells with more than 75 characters
   table.on("cellEdited", function (cell) {
@@ -79,28 +80,11 @@ browser.storage.local.get("replacees").then((result) => {
     saveData(cell, replacees);
   });
 
-  // add phrase button adds new row
+  // add phrase button adds new row and shows table if it was hidden
   const addButton = document.getElementsByClassName("add-row-button");
   addButton[0].addEventListener("click", function () {
+    document.getElementById("phrase-table").style.maxHeight = "350px";
+    document.getElementsByClassName("clipboard-container")[0].style.display = "flex";
     addNewRow(table, replacees);
-  });
-
-  // enable all button enables all rows
-  const enableAllButton = document.getElementsByClassName("enable-all-button");
-  enableAllButton[0].addEventListener("click", function () {
-    table.getRows().forEach(function (row) {
-      row.update({ enable: true });
-      saveData(row.getCell("enable"), replacees);
-    });
-  });
-
-  // disable all button disables all rows
-  const disableAllButton =
-    document.getElementsByClassName("disable-all-button");
-  disableAllButton[0].addEventListener("click", function () {
-    table.getRows().forEach(function (row) {
-      row.update({ enable: false });
-      saveData(row.getCell("enable"), replacees);
-    });
   });
 });

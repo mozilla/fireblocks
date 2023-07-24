@@ -37,6 +37,38 @@ function makeTable(replacees) {
     }
   }
 
+  const blockPhrasePlaceholderInput = function (cell, formatterParams) {
+    const cellValue = cell.getValue();
+    if (cellValue === "") {
+      // grey out text and italicize it
+      cell.getElement().style.color = "#999";
+      cell.getElement().style.fontStyle = "italic";
+      return "enter phrase to block";
+    } else {
+      //remove the greyed out text and italics
+      cell.getElement().style.color = "";
+      cell.getElement().style.fontStyle = "";
+      return cellValue;
+    }
+  };
+
+  const replacementPlaceholderInput = function (cell, formatterParams) {
+    const cellValue = cell.getValue();
+    console.log("row data" + cell.getRow().getData()["replaceWith"]);
+    // if the cell is empty and the replace with option is not redact
+    if (cellValue === "" && cell.getRow().getData()["replaceWith"] === "Custom") {
+      // grey out text and italicize it
+      cell.getElement().style.color = "#999";
+      cell.getElement().style.fontStyle = "italic";
+      return "enter replacement";
+    } else {
+      //remove the greyed out text and italics
+      cell.getElement().style.color = "";
+      cell.getElement().style.fontStyle = "";
+      return cellValue;
+    }
+  };
+
   return new Tabulator("#phrase-table", {
     columns: [
       {
@@ -47,12 +79,17 @@ function makeTable(replacees) {
         hozAlign: "center",
         width: 87,
       },
-      { title: "Target", field: "target", editor: "input", width: 150 },
+      {
+        title: "Block Phrase",
+        field: "target",
+        formatter: blockPhrasePlaceholderInput,
+        editor: "input",
+        width: 170,
+      },
       {
         title: "Replace With",
         field: "replaceWith",
         editor: "list",
-        width: 128,
         editorParams: { values: { Redact: "Redact", Custom: "Custom" } },
         cellEdited: function (cell) {
           // if redact, clear the custom replacement cell
@@ -67,11 +104,13 @@ function makeTable(replacees) {
       {
         title: "Custom Replacement",
         field: "replacement",
+        formatter: replacementPlaceholderInput,
         editor: replacementEditor,
         editable: function (cell) {
           const selectValue = cell.getRow().getCell("replaceWith").getValue();
           return selectValue === "Custom";
         },
+        width: 180,
       },
       {
         title: "Replace Option",
@@ -79,36 +118,36 @@ function makeTable(replacees) {
         editor: "list",
         editorParams: {
           values: {
-            "Eliminate Block Phrase": "Eliminate Block Phrase",
-            "Destroy Context": "Destroy Context",
-            "Obliterate Entire Page": "Obliterate Entire Page",
+            "Block just phrase": "Block just phrase",
+            "Block entire section": "Block entire section",
+            "Block entire page": "Block entire page",
           },
         },
         // if the value is obliterate page, give an alert saying it
         // make break some pages
         cellEdited: function (cell) {
           const selectValue = cell.getValue();
-          if (selectValue === "Obliterate Entire Page") {
+          if (selectValue === "Block entire page") {
             alert(
               "Warning: This option may break some pages. Use with caution."
             );
           }
         },
       },
-      {
-        title: "Case Sensitive",
-        field: "caseSensitive",
-        formatter: "tickCross",
-        editor: true,
-        hozAlign: "center",
-      },
-      {
-        title: "Smart Case",
-        field: "smartCase",
-        formatter: "tickCross",
-        editor: true,
-        hozAlign: "center",
-      },
+      // {
+      //   title: "Case Sensitive",
+      //   field: "caseSensitive",
+      //   formatter: "tickCross",
+      //   editor: true,
+      //   hozAlign: "center",
+      // },
+      // {
+      //   title: "Smart Case",
+      //   field: "smartCase",
+      //   formatter: "tickCross",
+      //   editor: true,
+      //   hozAlign: "center",
+      // },
       {
         title: "",
         formatter: function (cell) {
@@ -119,16 +158,22 @@ function makeTable(replacees) {
           deleteButton.classList.add("remove-button");
           deleteButton.addEventListener("click", function () {
             deleteRow(cell.getRow(), replacees);
+            // if table is empty, hide it
+            if (replacees.length === 0) {
+              document.getElementById("phrase-table").style.maxHeight = "0px";
+              document.getElementsByClassName(
+                "clipboard-container"
+              )[0].style.display = "none";
+            }
           });
           return deleteButton;
         },
-        width: 10,
         hozAlign: "center",
         headerSort: false,
       },
     ],
     data: replacees,
-    layout: "fitDataTable",
+    layout: "fitDataFill",
     resizableColumns: true,
   });
 }
