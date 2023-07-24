@@ -2,11 +2,12 @@
 // block phrase with a replacement.
 function contextReplaceWith(text, replacee) {
   let sentence;
-  let regexFlags = replacee.caseSensitive ? "g" : "gi";
+  let regexFlags = "i";
   const regex = new RegExp(replacee.target, regexFlags);
 
   text.replace(regex, function (match) {
     const [startIndex, endIndex] = findSentenceStartAndEnd(text, match);
+
     if (replacee.replaceWith === "Redact") {
       const redactedSentence = redactReplace(text.slice(startIndex, endIndex));
       sentence =
@@ -18,10 +19,12 @@ function contextReplaceWith(text, replacee) {
         replacee.replacement,
         replacee.smartCase
       );
+
       sentence =
         replacement + contextReplaceWith(text.slice(endIndex), replacee);
     }
   });
+
   return sentence ? sentence + " " : text;
 }
 
@@ -35,7 +38,7 @@ function replaceContext(rootNode, replacee) {
     false
   );
 
-  const regexFlags = replacee.caseSensitive ? "gu" : "gui";
+  const regexFlags = "gi";
   const regex = new RegExp(replacee.target, regexFlags);
   const stragglerArray = [];
 
@@ -65,11 +68,7 @@ function replaceContext(rootNode, replacee) {
       node.childNodes.forEach((child) => {
         if (child.nodeType === Node.TEXT_NODE) {
           child.textContent.replace(regex, () => {
-            child.textContent = contextReplaceWith(
-              child.textContent,
-              replacee,
-              child
-            );
+            child.textContent = contextReplaceWith(child.textContent, replacee);
           });
         } else {
           replaceContext(child, replacee);
@@ -87,4 +86,25 @@ function replaceContext(rootNode, replacee) {
     }
   }
   replaceStragglers(stragglerArray.reverse(), replacee);
+}
+
+// Do the same as above but lighten the scope due to
+// the target being a subset of the replacement
+function replaceContextText(rootNode, replacee) {
+  const regexFlags = "i";
+  const regex = new RegExp(replacee.target, regexFlags);
+
+  const walker = document.createTreeWalker(
+    rootNode,
+    NodeFilter.SHOW_TEXT,
+    null,
+    false
+  );
+
+  let node;
+  while ((node = walker.nextNode())) {
+    node.textContent.replace(regex, () => {
+      node.textContent = contextReplaceWith(node.textContent, replacee);
+    });
+  }
 }

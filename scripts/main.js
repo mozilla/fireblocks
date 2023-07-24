@@ -1,17 +1,31 @@
 // Route the replacee to the appropriate replacement function
 function doReplacement(node, replacee) {
   switch (replacee.replaceOption) {
-    case "Obliterate Entire Page":
+    case "Block entire page":
       replacePage(node, replacee);
-      observeChanges(node, replacee, replacePage);
-    case "Eliminate Block Phrase":
-      replaceBlockPhraseOnly(node, replacee);
-      observeChanges(node, replacee, replaceBlockPhraseOnly);
-    case "Destroy Context":
-      replaceContext(node, replacee);
-      observeChanges(node, replacee, replaceContext);
+      if (!isSubsetString(replacee.target, replacee.replacement)) {
+        observeChanges(node, replacee, replacePage);
+      }
+      return;
+    case "Block just phrase":
+      if (!isSubsetString(replacee.target, replacee.replacement)) {
+        replaceBlockPhraseOnly(node, replacee);
+        observeChanges(node, replacee, replaceBlockPhraseOnly);
+      } else {
+        replaceBlockPhraseTextOnly(node, replacee);
+      }
+      return;
+    case "Block entire section":
+      if (!isSubsetString(replacee.target, replacee.replacement)) {
+        replaceContext(node, replacee);
+        observeChanges(node, replacee, replaceContext);
+      } else {
+        replaceContextText(node, replacee);
+      }
+      return;
   }
 }
+
 
 // Retrieve all replacees from storage and replace the body
 // and head of the page for each
@@ -20,8 +34,8 @@ function startReplacement() {
     const replacees = result.replacees || [];
     replacees.forEach((replacee) => {
       if (replacee.enable && replacee.target) {
-      doReplacement(document.body, replacee);
-      doReplacement(document.head, replacee);
+        doReplacement(document.body, replacee);
+        doReplacement(document.head, replacee);
       }
     });
   });

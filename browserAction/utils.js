@@ -5,9 +5,9 @@ function addNewRow(table, replacees) {
     id: lastId + 1,
     enable: false,
     target: "",
-    replaceWith: "Redact",
+    replaceWith: "Custom",
     replacement: "",
-    replaceOption: "Eliminate Block Phrase",
+    replaceOption: "Block just phrase",
     caseSensitive: false,
     smartCase: false,
   };

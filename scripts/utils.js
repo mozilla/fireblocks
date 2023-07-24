@@ -76,6 +76,9 @@ function replaceByWord(text, replacement, smartCase) {
   for (let i = 0; i < numTextWords; i++) {
     const textWord = textWords[i];
     const replacementWord = replacementWords[i % numReplacementWords];
+    if (!textWord) {
+      continue;
+    }
 
     if (smartCase) {
       newSentence +=
@@ -114,7 +117,7 @@ function findSentenceStartAndEnd(text, match) {
 // Replace nodes that did not register as replaced due to
 // race conditions.
 function replaceStragglers(stragglerArray, replacee) {
-  const regexFlags = replacee.caseSensitive ? "g" : "gi";
+  const regexFlags = "i";
   const regex = new RegExp(replacee.target, regexFlags);
   stragglerArray.forEach((node) => {
     if (!node.textContent.match(regex)) {
@@ -130,11 +133,16 @@ function replaceStragglers(stragglerArray, replacee) {
     }
 
     node.textContent = node.textContent.replace(regex, (match) => {
-      if (replacee.replaceOption === "Destroy Context") {
+      if (replacee.replaceOption === "Block entire section") {
         return contextReplaceWith(node.textContent, replacee);
-      } else if (replacee.replaceOption === "Eliminate Block Phrase") {
+      } else if (replacee.replaceOption === "Block just phrase") {
         return blockReplaceWith(match, replacee, node);
       }
     });
   });
+}
+
+
+function isSubsetString(target, replacement) {
+  return replacement.includes(target);
 }

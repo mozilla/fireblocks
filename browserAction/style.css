@@ -23,38 +23,18 @@
   font-size: 13px;
 }
 
-.header-container {
-  display: flex;
-  justify-content: left;
-  align-items: center;
-  margin-top: 10px;
-  margin-left: 2.5%;
-  width: 95%;
-}
-
-.table-title {
-  font-family: "Zilla Slab Header", sans-serif;
-  font-size: 23px;
-  color: #ffffff;
-  background-color: black;
-  width: max-content;
-  padding: 5px 10px;
-  margin-top: 7.5px;
-}
-
-.button-container {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
-  grid-gap: 10px;
-  margin-left: 2.5%;
-  width: 95%;
-}
-
 .btn {
   font-family: "Zilla Slab Cell", sans-serif;
 }
 
 /* add phrase button */
+.add-row-button {
+  width: 95%;
+  margin-left: 2.5%;
+  margin-top: 10px;
+
+}
+
 .btn-outline-primary {
   color: #8b44db;
   border-color: #8b44db;
@@ -72,33 +52,17 @@
   background-color: #733ab5;
 }
 
-/* enable/disable button */
-.btn-outline-secondary {
-  color: #ff6a29;
-  border-color: #ff6a29;
-}
-
-.btn-outline-secondary:hover {
-  color: #fff;
-  background-color: #ff6a29;
-  border-color: #ff6a29;
-}
-
-.btn-outline-secondary:not(:disabled):active {
-  border-color: #e55e1c;
-  color: #fff;
-  background-color: #e55e1c;
-}
-
+/* clipboard buttons */
 .clipboard-container {
   display: flex;
   grid-gap: 10px;
-  margin-left: 1%;
+  width: 95%;
+  margin-left: 2.5%;
   overflow-x: auto;
   white-space: nowrap;
+  margin-bottom: 10px;
 }
 
-/* clipboard buttons */
 .btn-outline-info {
   font-family: "Zilla Slab Cell", sans-serif;
   color: #fea252;
