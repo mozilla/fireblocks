@@ -37,6 +37,7 @@ function makeTable(replacees) {
     }
   }
 
+  // when the block phrase cell is empty, grey out the text and italicize it
   const blockPhrasePlaceholderInput = function (cell, formatterParams) {
     const cellValue = cell.getValue();
     if (cellValue === "") {
@@ -52,15 +53,24 @@ function makeTable(replacees) {
     }
   };
 
-  const replacementPlaceholderInput = function (cell, formatterParams) {
+  // when the replacement cell is empty, grey out the text and italicize it
+  // based on the replaceWith column
+  const replacementPlaceholderInput = function (cell) {
     const cellValue = cell.getValue();
-    console.log("row data" + cell.getRow().getData()["replaceWith"]);
-    // if the cell is empty and the replace with option is not redact
-    if (cellValue === "" && cell.getRow().getData()["replaceWith"] === "Custom") {
-      // grey out text and italicize it
+    if (
+      cellValue === "" &&
+      cell.getRow().getData()["replaceWith"] === "Custom"
+    ) {
       cell.getElement().style.color = "#999";
       cell.getElement().style.fontStyle = "italic";
       return "enter replacement";
+    } else if (
+      cellValue === "" &&
+      cell.getRow().getData()["replaceWith"] === "Redact"
+    ) {
+      cell.getElement().style.color = "#999";
+      cell.getElement().style.fontStyle = "italic";
+      return "N/A: using redact";
     } else {
       //remove the greyed out text and italics
       cell.getElement().style.color = "";
