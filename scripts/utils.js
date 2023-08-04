@@ -95,9 +95,9 @@ function replaceByWord(text, replacement, smartCase) {
   return newSentence;
 }
 
-// Replaces all alphanumeric characters with a black square
-function redactReplace(replaceeText) {
-  return replaceeText.replace(/[a-z0-9]/gi, "█");
+// Replaces all alphanumeric characters with a black square.
+function redactReplace(replaceeText, redactSymbol) {
+  return replaceeText.replace(/[a-zA-Z0-9]/g, redactSymbol);
 }
 
 // Finds the index of the first and last character of the sentence

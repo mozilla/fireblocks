@@ -47,6 +47,7 @@ startReplacement();
 // listen for a message for editing a replacee
 browser.runtime.onMessage.addListener((message) => {
   if (message.rowData && message.rowData.enable && message.rowData.target) {
+    console.log(message.rowData);
     doReplacement(document.body, message.rowData);
     doReplacement(document.head, message.rowData);
   }

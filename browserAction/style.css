@@ -51,32 +51,3 @@
   color: #fff;
   background-color: #733ab5;
 }
-
-/* clipboard buttons */
-.clipboard-container {
-  display: flex;
-  grid-gap: 10px;
-  width: 95%;
-  margin-left: 2.5%;
-  overflow-x: auto;
-  white-space: nowrap;
-  margin-bottom: 10px;
-}
-
-.btn-outline-info {
-  font-family: "Zilla Slab Cell", sans-serif;
-  color: #fea252;
-  border-color: #fea252;
-}
-
-.btn-outline-info:hover {
-  color: #fff;
-  background-color: #fea252;
-  border-color: #fea252;
-}
-
-.btn-outline-info:not(:disabled):active {
-  border-color: #de8e49;
-  color: #fff;
-  background-color: #de8e49;
-}

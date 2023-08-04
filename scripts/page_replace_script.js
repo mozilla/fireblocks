@@ -22,9 +22,9 @@ function replacePage(rootNode, replacee) {
 
   let textNode;
   while ((textNode = walker.nextNode())) {
-    if (replacee.replaceWith === "Redact") {
-      textNode.textContent = redactReplace(textNode.textContent);
-    } else if (replacee.replaceWith === "Custom") {
+    if (replacee.replaceWith === "Redact (Custom)") {
+      textNode.textContent = redactReplace(textNode.textContent, replacee.replacement);
+    } else if (replacee.replaceWith === "Text (Custom)") {
       // filter out newlines, whitespace, and so on so that they
       // don't get replaced and mess up the page format
       if (!textNode.textContent.match(/[a-zA-Z0-9\-]/)) {

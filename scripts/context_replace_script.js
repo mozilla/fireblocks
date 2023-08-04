@@ -8,11 +8,11 @@ function contextReplaceWith(text, replacee) {
   text.replace(regex, function (match) {
     const [startIndex, endIndex] = findSentenceStartAndEnd(text, match);
 
-    if (replacee.replaceWith === "Redact") {
-      const redactedSentence = redactReplace(text.slice(startIndex, endIndex));
+    if (replacee.replaceWith === "Redact (Custom)") {
+      const redactedSentence = redactReplace(text.slice(startIndex, endIndex), replacee.replacement);
       sentence =
         redactedSentence + contextReplaceWith(text.slice(endIndex), replacee);
-    } else if (replacee.replaceWith === "Custom") {
+    } else if (replacee.replaceWith === "Text (Custom)") {
       const sentenceFound = text.slice(startIndex, endIndex);
       const replacement = replaceByWord(
         sentenceFound,

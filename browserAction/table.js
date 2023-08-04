@@ -7,7 +7,7 @@ function makeTable(replacees) {
   function replacementEditor(cell, onRendered, success, cancel) {
     const selectValue = cell.getRow().getCell("replaceWith").getValue();
     // if custom, allow for editing
-    if (selectValue === "Custom") {
+    if (selectValue === "Text (Custom)") {
       const input = document.createElement("input");
       input.setAttribute("type", "text");
       input.setAttribute("value", cell.getValue());
@@ -31,9 +31,49 @@ function makeTable(replacees) {
       input.addEventListener("blur", onChange);
 
       return input;
-      // if redact, don't allow editing
-    } else {
-      success(cell.getValue());
+      // if redact (custom), make this box a dropdown menu
+    } else if (selectValue === "Redact (Custom)") {
+      const select = document.createElement("select");
+      const options = [
+        "\u{1F480}", // skull
+        "\u{1F4A9}", // poop
+        "\u{1F921}", // clown
+        "\u{1F346}", // eggplant
+        "\u{1F92C}", // face censored
+        "\u{1F44E}", // thumbs down
+        "\u{2588}", //  █
+      ];
+
+      options.forEach((option) => {
+        const opt = document.createElement("option");
+        opt.value = option;
+        opt.text = option;
+        select.appendChild(opt);
+      });
+
+      select.style.width = "100%";
+      select.style.boxSizing = "border-box";
+      select.style.height = "100%";
+      select.style.textAlign = "center";
+
+      select.value = cell.getValue();
+
+      onRendered(function () {
+        select.focus();
+      });
+
+      function onChange() {
+        if (select.value !== cell.getValue()) {
+          success(select.value);
+        } else {
+          cancel();
+        }
+      }
+
+      select.addEventListener("change", onChange);
+      select.addEventListener("blur", onChange);
+
+      return select;
     }
   }
 
@@ -59,18 +99,18 @@ function makeTable(replacees) {
     const cellValue = cell.getValue();
     if (
       cellValue === "" &&
-      cell.getRow().getData()["replaceWith"] === "Custom"
+      cell.getRow().getData()["replaceWith"] === "Text (Custom)"
     ) {
       cell.getElement().style.color = "#999";
       cell.getElement().style.fontStyle = "italic";
       return "enter replacement";
     } else if (
       cellValue === "" &&
-      cell.getRow().getData()["replaceWith"] === "Redact"
+      cell.getRow().getData()["replaceWith"] === "Redact (Custom)"
     ) {
       cell.getElement().style.color = "#999";
       cell.getElement().style.fontStyle = "italic";
-      return "N/A: using redact";
+      return "choose symbol";
     } else {
       //remove the greyed out text and italics
       cell.getElement().style.color = "";
@@ -79,48 +119,38 @@ function makeTable(replacees) {
     }
   };
 
+  /*
+   *
+   * TABULATOR INSTANCE
+   *
+   */
   return new Tabulator("#phrase-table", {
     columns: [
-      {
-        title: "Enable",
-        field: "enable",
-        formatter: "tickCross",
-        editor: true,
-        hozAlign: "center",
-        width: 87,
-      },
       {
         title: "Block Phrase",
         field: "target",
         formatter: blockPhrasePlaceholderInput,
         editor: "input",
-        width: 170,
       },
       {
         title: "Replace With",
         field: "replaceWith",
         editor: "list",
-        editorParams: { values: { Redact: "Redact", Custom: "Custom" } },
-        cellEdited: function (cell) {
-          // if redact, clear the custom replacement cell
-          const replaceWithValue = cell.getValue();
-          if (replaceWithValue === "Redact") {
-            const replacementCell = cell.getRow().getCell("replacement");
-            replacementCell.setValue("");
-            saveData(replacementCell, replacees);
-          }
+        editorParams: {
+          values: {
+            "Redact (Custom)": "Redact (Custom)",
+            "Text (Custom)": "Text (Custom)",
+          },
         },
+        cellEdited: function (cell) {
+          cell.getRow().getCell("replacement").setValue("");
+        }
       },
       {
         title: "Custom Replacement",
         field: "replacement",
         formatter: replacementPlaceholderInput,
         editor: replacementEditor,
-        editable: function (cell) {
-          const selectValue = cell.getRow().getCell("replaceWith").getValue();
-          return selectValue === "Custom";
-        },
-        width: 180,
       },
       {
         title: "Replace Option",
@@ -144,22 +174,14 @@ function makeTable(replacees) {
           }
         },
       },
-      // {
-      //   title: "Case Sensitive",
-      //   field: "caseSensitive",
-      //   formatter: "tickCross",
-      //   editor: true,
-      //   hozAlign: "center",
-      // },
-      // {
-      //   title: "Smart Case",
-      //   field: "smartCase",
-      //   formatter: "tickCross",
-      //   editor: true,
-      //   hozAlign: "center",
-      // },
       {
-        title: "",
+        title: "Enable",
+        field: "enable",
+        formatter: "tickCross",
+        editor: true,
+        hozAlign: "center",
+      },
+      {
         formatter: function (cell) {
           // delete buttons behaviour
           const deleteButton = document.createElement("i");
@@ -171,9 +193,6 @@ function makeTable(replacees) {
             // if table is empty, hide it
             if (replacees.length === 0) {
               document.getElementById("phrase-table").style.maxHeight = "0px";
-              document.getElementsByClassName(
-                "clipboard-container"
-              )[0].style.display = "none";
             }
           });
           return deleteButton;
@@ -181,6 +200,10 @@ function makeTable(replacees) {
         hozAlign: "center",
         headerSort: false,
       },
+      {
+        title: "",
+        headerSort: false,
+      }
     ],
     data: replacees,
     layout: "fitDataFill",

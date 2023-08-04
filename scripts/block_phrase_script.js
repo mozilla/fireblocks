@@ -1,8 +1,8 @@
 // Works as a redirector for the type of replacement
 function blockReplaceWith(match, replacee) {
-  if (replacee.replaceWith === "Redact") {
-    return redactReplace(match);
-  } else if (replacee.replaceWith === "Custom") {
+  if (replacee.replaceWith === "Redact (Custom)") {
+    return redactReplace(match, replacee.replacement);
+  } else if (replacee.replaceWith === "Text (Custom)") {
     if (replacee.smartCase) {
       return smartCaseReplace(match, replacee.replacement);
     } else {
