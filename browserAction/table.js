@@ -56,7 +56,7 @@ function makeTable(replacees) {
       select.style.height = "100%";
       select.style.textAlign = "center";
 
-      select.value = cell.getValue();
+      select.value = cell.getValue()? cell.getValue() : "\u{2588}";
 
       onRendered(function () {
         select.focus();
@@ -110,7 +110,7 @@ function makeTable(replacees) {
     ) {
       cell.getElement().style.color = "#999";
       cell.getElement().style.fontStyle = "italic";
-      return "choose symbol";
+      return "click to choose symbol";
     } else {
       //remove the greyed out text and italics
       cell.getElement().style.color = "";
@@ -131,11 +131,13 @@ function makeTable(replacees) {
         field: "target",
         formatter: blockPhrasePlaceholderInput,
         editor: "input",
+        resizable: false,
       },
       {
         title: "Replace With",
         field: "replaceWith",
         editor: "list",
+        resizable: false,
         editorParams: {
           values: {
             "Redact (Custom)": "Redact (Custom)",
@@ -149,6 +151,7 @@ function makeTable(replacees) {
       {
         title: "Custom Replacement",
         field: "replacement",
+        resizable: false,
         formatter: replacementPlaceholderInput,
         editor: replacementEditor,
       },
@@ -156,6 +159,7 @@ function makeTable(replacees) {
         title: "Replace Option",
         field: "replaceOption",
         editor: "list",
+        resizable: false,
         editorParams: {
           values: {
             "Block just phrase": "Block just phrase",
@@ -179,6 +183,7 @@ function makeTable(replacees) {
         field: "enable",
         formatter: "tickCross",
         editor: true,
+        resizable: false,
         hozAlign: "center",
       },
       {
@@ -198,15 +203,17 @@ function makeTable(replacees) {
           return deleteButton;
         },
         hozAlign: "center",
+        resizable: false,
         headerSort: false,
       },
       {
         title: "",
         headerSort: false,
+        resizable: false,
       }
     ],
     data: replacees,
-    layout: "fitDataFill",
+    layout: "fitColumnsFill",
     resizableColumns: true,
   });
 }
