@@ -33,7 +33,7 @@ function startReplacement() {
   browser.storage.local.get("replacees").then((result) => {
     const replacees = result.replacees || [];
     replacees.forEach((replacee) => {
-      if (replacee.enable && replacee.target) {
+      if (replacee.enable && replacee.target && replacee.replacement) {
         doReplacement(document.body, replacee);
         doReplacement(document.head, replacee);
       }
@@ -46,8 +46,7 @@ startReplacement();
 
 // listen for a message for editing a replacee
 browser.runtime.onMessage.addListener((message) => {
-  if (message.rowData && message.rowData.enable && message.rowData.target) {
-    console.log(message.rowData);
+  if (message.rowData && message.rowData.enable && message.rowData.target && message.rowData.replacement) {
     doReplacement(document.body, message.rowData);
     doReplacement(document.head, message.rowData);
   }
