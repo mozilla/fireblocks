@@ -1,129 +1,120 @@
+// make a different editor for the "custom replacement" column
+// that changes the behaviour itself depending on the value of
+// the "replaceWith" column
+function replacementEditor(cell, onRendered, success, cancel) {
+  const selectValue = cell.getRow().getCell("replaceWith").getValue();
+  // if custom, allow for editing
+  if (selectValue === "Text (Custom)") {
+    const input = document.createElement("input");
+    input.setAttribute("type", "text");
+    input.setAttribute("value", cell.getValue());
+    input.style.width = "100%";
+    input.style.boxSizing = "border-box";
+
+    onRendered(function () {
+      input.focus();
+      input.style.height = "100%";
+    });
+
+    function onChange() {
+      if (input.value !== cell.getValue()) {
+        success(input.value);
+      } else {
+        cancel();
+      }
+    }
+
+    input.addEventListener("change", onChange);
+    input.addEventListener("blur", onChange);
+
+    return input;
+    // if redact (custom), make this box a dropdown menu
+  } else if (selectValue === "Redact (Custom)") {
+    const select = document.createElement("select");
+    const options = [
+      "\u{1F480}", // skull
+      "\u{1F4A9}", // poop
+      "\u{1F921}", // clown
+      "\u{1F346}", // eggplant
+      "\u{1F92C}", // face censored
+      "\u{1F44E}", // thumbs down
+      "\u{2588}", //  █
+    ];
+
+    options.forEach((option) => {
+      const opt = document.createElement("option");
+      opt.value = option;
+      opt.text = option;
+      select.appendChild(opt);
+    });
+
+    select.style.width = "100%";
+    select.style.boxSizing = "border-box";
+    select.style.height = "100%";
+    select.style.textAlign = "center";
+
+    select.value = cell.getValue() ? cell.getValue() : "\u{2588}";
+
+    onRendered(function () {
+      select.focus();
+    });
+
+    function onChange() {
+      if (select.value !== cell.getValue()) {
+        success(select.value);
+      } else {
+        cancel();
+      }
+    }
+    select.addEventListener("change", onChange);
+    select.addEventListener("blur", onChange);
+    return select;
+  }
+}
+
+// when the block phrase cell is empty, grey out the text and italicize it
+const blockPhrasePlaceholderInput = function (cell) {
+  const cellValue = cell.getValue();
+  if (cellValue === "") {
+    // grey out text and italicize it
+    cell.getElement().style.color = "#999";
+    cell.getElement().style.fontStyle = "italic";
+    return "enter phrase to block";
+  } else {
+    //remove the greyed out text and italics
+    cell.getElement().style.color = "";
+    cell.getElement().style.fontStyle = "";
+    return cellValue;
+  }
+};
+
+// when the replacement cell is empty, grey out the text and italicize it
+// based on the replaceWith column
+const replacementPlaceholderInput = function (cell) {
+  const cellValue = cell.getValue();
+  if (
+    cellValue === "" &&
+    cell.getRow().getData()["replaceWith"] === "Text (Custom)"
+  ) {
+    cell.getElement().style.color = "#999";
+    cell.getElement().style.fontStyle = "italic";
+    return "enter replacement";
+  } else if (
+    cell.getRow().getData()["replaceWith"] === "Redact (Custom)"
+  ) {
+    cell.getElement().style.color = "#999";
+    return cellValue;
+  } else {
+    //remove the greyed out text and italics
+    cell.getElement().style.color = "";
+    cell.getElement().style.fontStyle = "";
+    return cellValue;
+  }
+};
+
 // makes the tabulator table object with custom logic for some
 // of the columns
 function makeTable(replacees) {
-  // make a different editor for the "custom replacement" column
-  // that changes the behaviour itself depending on the value of
-  // the "replaceWith" column
-  function replacementEditor(cell, onRendered, success, cancel) {
-    const selectValue = cell.getRow().getCell("replaceWith").getValue();
-    // if custom, allow for editing
-    if (selectValue === "Text (Custom)") {
-      const input = document.createElement("input");
-      input.setAttribute("type", "text");
-      input.setAttribute("value", cell.getValue());
-      input.style.width = "100%";
-      input.style.boxSizing = "border-box";
-
-      onRendered(function () {
-        input.focus();
-        input.style.height = "100%";
-      });
-
-      function onChange() {
-        if (input.value !== cell.getValue()) {
-          success(input.value);
-        } else {
-          cancel();
-        }
-      }
-
-      input.addEventListener("change", onChange);
-      input.addEventListener("blur", onChange);
-
-      return input;
-      // if redact (custom), make this box a dropdown menu
-    } else if (selectValue === "Redact (Custom)") {
-      const select = document.createElement("select");
-      const options = [
-        "\u{1F480}", // skull
-        "\u{1F4A9}", // poop
-        "\u{1F921}", // clown
-        "\u{1F346}", // eggplant
-        "\u{1F92C}", // face censored
-        "\u{1F44E}", // thumbs down
-        "\u{2588}", //  █
-      ];
-
-      options.forEach((option) => {
-        const opt = document.createElement("option");
-        opt.value = option;
-        opt.text = option;
-        select.appendChild(opt);
-      });
-
-      select.style.width = "100%";
-      select.style.boxSizing = "border-box";
-      select.style.height = "100%";
-      select.style.textAlign = "center";
-
-      select.value = cell.getValue()? cell.getValue() : "\u{2588}";
-
-      onRendered(function () {
-        select.focus();
-      });
-
-      function onChange() {
-        if (select.value !== cell.getValue()) {
-          success(select.value);
-        } else {
-          cancel();
-        }
-      }
-
-      select.addEventListener("change", onChange);
-      select.addEventListener("blur", onChange);
-
-      return select;
-    }
-  }
-
-  // when the block phrase cell is empty, grey out the text and italicize it
-  const blockPhrasePlaceholderInput = function (cell, formatterParams) {
-    const cellValue = cell.getValue();
-    if (cellValue === "") {
-      // grey out text and italicize it
-      cell.getElement().style.color = "#999";
-      cell.getElement().style.fontStyle = "italic";
-      return "enter phrase to block";
-    } else {
-      //remove the greyed out text and italics
-      cell.getElement().style.color = "";
-      cell.getElement().style.fontStyle = "";
-      return cellValue;
-    }
-  };
-
-  // when the replacement cell is empty, grey out the text and italicize it
-  // based on the replaceWith column
-  const replacementPlaceholderInput = function (cell) {
-    const cellValue = cell.getValue();
-    if (
-      cellValue === "" &&
-      cell.getRow().getData()["replaceWith"] === "Text (Custom)"
-    ) {
-      cell.getElement().style.color = "#999";
-      cell.getElement().style.fontStyle = "italic";
-      return "enter replacement";
-    } else if (
-      cellValue === "" &&
-      cell.getRow().getData()["replaceWith"] === "Redact (Custom)"
-    ) {
-      cell.getElement().style.color = "#999";
-      cell.getElement().style.fontStyle = "italic";
-      return "click to choose symbol";
-    } else {
-      //remove the greyed out text and italics
-      cell.getElement().style.color = "";
-      cell.getElement().style.fontStyle = "";
-      return cellValue;
-    }
-  };
-
-  /*
-   *
-   * TABULATOR INSTANCE
-   *
-   */
   return new Tabulator("#phrase-table", {
     columns: [
       {
@@ -146,7 +137,7 @@ function makeTable(replacees) {
         },
         cellEdited: function (cell) {
           cell.getRow().getCell("replacement").setValue("");
-        }
+        },
       },
       {
         title: "Custom Replacement",
@@ -210,10 +201,10 @@ function makeTable(replacees) {
         title: "",
         headerSort: false,
         resizable: false,
-      }
+      },
     ],
     data: replacees,
-    layout: "fitColumnsFill",
+    layout: "fitDataFill",
     resizableColumns: true,
   });
 }
