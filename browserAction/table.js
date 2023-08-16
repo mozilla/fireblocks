@@ -100,10 +100,12 @@ const replacementPlaceholderInput = function (cell) {
     cell.getElement().style.fontStyle = "italic";
     return "enter replacement";
   } else if (
+    cellValue === "" &&
     cell.getRow().getData()["replaceWith"] === "Redact (Custom)"
   ) {
     cell.getElement().style.color = "#999";
-    return cellValue;
+    cell.getElement().style.fontStyle = "italic";
+    return "click to choose symbol";
   } else {
     //remove the greyed out text and italics
     cell.getElement().style.color = "";
