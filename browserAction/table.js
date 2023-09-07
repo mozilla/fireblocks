@@ -53,7 +53,7 @@ function replacementEditor(cell, onRendered, success, cancel) {
     select.style.height = "100%";
     select.style.textAlign = "center";
 
-    select.value = cell.getValue() ? cell.getValue() : "\u{2588}";
+    select.value = cell.getValue() ? cell.getValue() : "\u{2588}\u{2588}\u{2588}";
 
     onRendered(function () {
       select.focus();
