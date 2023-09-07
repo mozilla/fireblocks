@@ -32,13 +32,13 @@ function replacementEditor(cell, onRendered, success, cancel) {
   } else if (selectValue === "Redact (Custom)") {
     const select = document.createElement("select");
     const options = [
-      "\u{1F480}", // skull
-      "\u{1F4A9}", // poop
-      "\u{1F921}", // clown
-      "\u{1F346}", // eggplant
-      "\u{1F92C}", // face censored
-      "\u{1F44E}", // thumbs down
-      "\u{2588}", //  █
+      "\u{1F480}\u{1F480}\u{1F480}", // skull
+      "\u{1F4A9}\u{1F4A9}\u{1F4A9}", // poop
+      "\u{1F921}\u{1F921}\u{1F921}", // clown
+      "\u{1F346}\u{1F346}\u{1F346}", // eggplant
+      "\u{1F92C}\u{1F92C}\u{1F92C}", // face censored
+      "\u{1F44E}\u{1F44E}\u{1F44E}", // thumbs down
+      "\u{2588}\u{2588}\u{2588}", //  █
     ];
 
     options.forEach((option) => {

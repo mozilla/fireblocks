@@ -97,7 +97,7 @@ function replaceByWord(text, replacement, smartCase) {
 
 // Replaces all alphanumeric characters with a black square.
 function redactReplace(replaceeText, redactSymbol) {
-  return replaceeText.replace(/[a-zA-Z0-9]/g, redactSymbol);
+  return replaceeText.replace(/[a-zA-Z0-9]/g, redactSymbol[0]);
 }
 
 // Finds the index of the first and last character of the sentence
