@@ -1,7 +1,7 @@
 {
   "devDependencies": {
     "rimraf": "^5.0.1",
-    "web-ext": "^7.6.2"
+    "web-ext": "^7.8.0"
   },
   "scripts": {
     "start": "npm run dist && web-ext run",
