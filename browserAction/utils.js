@@ -5,7 +5,7 @@ function addNewRow(table, replacees) {
     id: lastId + 1,
     enable: false,
     target: "",
-    replaceWith: "Custom",
+    replaceWith: "Text (Custom)",
     replacement: "",
     replaceOption: "Block just phrase",
     caseSensitive: false,
@@ -40,12 +40,12 @@ function saveData(cell, replacees) {
   }
 }
 
-// copy the text to the clipboard
-function copyToClipboard(text) {
-  const dummy = document.createElement("textarea");
-  document.body.appendChild(dummy);
-  dummy.value = text;
-  dummy.select();
-  navigator.clipboard.writeText(text);
-  document.body.removeChild(dummy);
+function convertEmojiToUnicode(emoji) {
+  // this function takes in an emoji and returns the unicode
+  // in the format "\u{1F600}"
+
+  // convert emoji to unicode
+  const codePoint = emoji.codePointAt(0).toString(16);
+  const unicode = `\\u{${codePoint}}`;
+  return unicode;
 }

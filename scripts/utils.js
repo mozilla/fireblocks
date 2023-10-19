@@ -95,9 +95,10 @@ function replaceByWord(text, replacement, smartCase) {
   return newSentence;
 }
 
-// Replaces all alphanumeric characters with a black square
-function redactReplace(replaceeText) {
-  return replaceeText.replace(/[a-z0-9]/gi, "█");
+// Replaces all alphanumeric characters with a black square.
+function redactReplace(replaceeText, redactSymbol) {
+  // since we have 3 repeating chars, we only want to use 1/3 of the redactSymbol
+  return replaceeText.replace(/[a-zA-ZÀ-ÖØ-öø-ÿ0-9]/g, redactSymbol.substring(0, redactSymbol.length / 3));
 }
 
 // Finds the index of the first and last character of the sentence

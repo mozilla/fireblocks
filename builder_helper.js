@@ -6,7 +6,7 @@ const iconsDir = "dist/bootstrap-icons/icons";
 const bootstrapCSSDir = "dist/bootstrap/css";
 const tabulatorCSSDir = "dist/tabulator-tables/css";
 
-// Remove all icons that we don't need (they don't contain clipboard or trash)
+// Remove all icons that we don't need (they don't contain trash)
 function removeIcons() {
   const iconsPath = path.join(__dirname, iconsDir);
 
@@ -16,7 +16,7 @@ function removeIcons() {
       return;
     }
 
-    const keywords = ["clipboard", "trash"];
+    const keywords = ["trash"];
     const iconsToRemove = files.filter((icon) => {
       return !keywords.some((keyword) => icon.includes(keyword));
     });
