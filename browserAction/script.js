@@ -23,7 +23,6 @@ browser.storage.local.get("replacees").then((result) => {
       return;
     }
 
-    cell.getRow().getCell("replacement").setValue(replacement.trim());
     cell.getRow().getCell("target").setValue(target.trim());
     saveData(cell, replacees);
   });

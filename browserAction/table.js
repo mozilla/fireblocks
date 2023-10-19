@@ -125,6 +125,7 @@ function makeTable(replacees) {
         formatter: blockPhrasePlaceholderInput,
         editor: "input",
         resizable: false,
+        width: 140,
       },
       {
         title: "Replace With",
@@ -147,6 +148,7 @@ function makeTable(replacees) {
         resizable: false,
         formatter: replacementPlaceholderInput,
         editor: replacementEditor,
+        width: 180,
       },
       {
         title: "Replace Option",
